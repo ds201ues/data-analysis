@@ -1,0 +1,123 @@
+THE EIGHT LENSES — PASTE-READY PROMPTS
+Reading Data Masterclass · Dishant Singla · run on Aurex, inside BCCL
+Practice file: ad-sales-data.csv
+
+Each prompt is written to force checkable output: it makes the tool state what
+it dropped, show its working, and label what it assumed. Paste them, do not
+retype them — the wording is doing the work.
+
+==============================================================================
+
+LENS 1 — COMPARISON
+  Question it answers : How does this one stack up against that one?
+  Trap it hides       : Mumbai is biggest at everything. Biggest is not best.
+  Catch it by         : divide by something. Per rep, per order, per rupee. Then re-rank.
+
+  PROMPT:
+    Filter ad-sales-data.csv to status = Confirmed. Tell me how many rows you dropped, and why.
+    The city column has spelling variants. Show me the mapping BEFORE you apply it.
+    Total net_amount by city, sorted high to low.
+    Give me the gap between top and bottom as a multiple, not as two numbers.
+    Horizontal bar chart: sorted, one accent colour, values on bars, title = the finding as a sentence.
+
+------------------------------------------------------------------------------
+
+LENS 2 — RANKING
+  Question it answers : Who is on top, and who is at the bottom?
+  Trap it hides       : A top-10 flatters. The bottom holds the recoverable money.
+  Catch it by         : print both ends, with the order count beside every name.
+
+  PROMPT:
+    Rank all 30 reps by total net_amount on confirmed bookings only.
+    Show me the top 5 AND the bottom 5 in one table, with order count beside each name.
+    Flag any rep with fewer than 10 orders. I do not want a rank built on three deals.
+    State the gap between rank 5 and rank 25 as a multiple, and say what it would take to close it.
+
+------------------------------------------------------------------------------
+
+LENS 3 — TREND
+  Question it answers : What changed over time, and when exactly?
+  Trap it hides       : Raw lines let the biggest series bury every other story.
+  Catch it by         : index every series to a common base before you plot anything.
+
+  PROMPT:
+    Monthly net_amount by ad_type, 2022 to 2024, confirmed bookings only.
+    Index every series to its own first month = 100, so I compare shapes and not sizes.
+    Name the month each series changed direction. Do not just tell me it is growing.
+    Exclude any part-finished month at the end, and tell me explicitly if you excluded one.
+
+------------------------------------------------------------------------------
+
+LENS 4 — COMPOSITION
+  Question it answers : What makes up the total, and is the mix moving?
+  Trap it hides       : Volume can rise while revenue stalls. That is mix.
+  Catch it by         : plot share and absolute together. If they disagree, mix is the story.
+
+  PROMPT:
+    Share of net_amount by ad_type for each year: 2022, 2023, 2024. Confirmed only.
+    Give me share % and absolute rupees in the same table, side by side.
+    Tell me which category gained share while losing rupees, or the reverse. That is the finding.
+    100% stacked column by year. Label only the categories that moved more than 2 points.
+
+------------------------------------------------------------------------------
+
+LENS 5 — DISTRIBUTION
+  Question it answers : What does a typical one actually look like?
+  Trap it hides       : A handful of whales drag the average away from reality.
+  Catch it by         : ask for both, plus the ratio. Above 1.3× the mean is misleading you.
+
+  PROMPT:
+    Distribution of net_amount across confirmed bookings.
+    Give me mean, median, p25, p75, p90 — and the mean-to-median ratio as a number.
+    Histogram with the median drawn as a line on the chart, not just quoted in the caption.
+    If that ratio is above 1.3, tell me in one sentence which figure I should quote, and why.
+
+------------------------------------------------------------------------------
+
+LENS 6 — CORRELATION
+  Question it answers : Do these two things move together?
+  Trap it hides       : Two things moving together is not one causing the other.
+  Catch it by         : name the third thing — season, campaign, pricing.
+
+  PROMPT:
+    Scatter discount_pct against net_amount for confirmed bookings.
+    Give me the correlation coefficient, and say plainly whether that is strong, weak or nothing.
+    Do NOT describe this as one thing causing the other. I will ask for that separately.
+    List three other factors that could be driving both, given this is ad sales data.
+
+------------------------------------------------------------------------------
+
+LENS 7 — OUTLIERS
+  Question it answers : What looks wrong, and is it real or a data error?
+  Trap it hides       : A few large deals can manufacture a trend.
+  Catch it by         : re-run the headline with the top 1% removed. If it vanishes, say so.
+
+  PROMPT:
+    Flag every booking above 3× the median net_amount. How many, and what % of revenue are they?
+    Show them in a table with client, city, rep and date, so I can eyeball them for data errors.
+    Then re-run the revenue growth headline with those rows excluded. Show me both numbers.
+    Tell me straight whether my headline survives without them.
+
+------------------------------------------------------------------------------
+
+LENS 8 — DECOMPOSITION
+  Question it answers : Why did the number move?
+  Trap it hides       : “It went up” is not a driver. The parts must sum.
+  Catch it by         : demand the residual. Not near zero means not finished.
+
+  PROMPT:
+    Net revenue moved from ₹12.81 Cr in 2023 to ₹15.54 Cr in 2024. Split that change, with code.
+    volume effect = (orders24 − orders23) × avg23    size effect = (avg24 − avg23) × orders24
+    The two must sum to the total change. Print the reconciliation and print the residual.
+    If the residual is not about zero, stop and tell me what is unexplained.
+    Label every driver OBSERVED or INFERRED.
+
+------------------------------------------------------------------------------
+
+THE FIVE-CHECK GATE — run this before you send anything
+
+  1. Row accounting      Ask how many rows it used. Compare to the file.
+  2. Spot-verify         Check the single number that matters against the source.
+  3. Ask it a second way Different phrasing, same question. Two answers means none.
+  4. Open what it made   Look at the axis. Read the labels.
+  5. Sign it             Would you put your name on this? You are about to.
